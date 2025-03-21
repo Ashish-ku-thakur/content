@@ -83,8 +83,9 @@ const EditArticlePage: React.FC<EditArticleProps> = ({ article }) => {
                                         <Image
                                             src={article.featuredImage || ""}
                                             alt={article?.title}
-                                            className='h-48 w-48 object-cover rounded-md'
-                                            fill
+                                            className='object-cover rounded-md'
+                                            height={100}
+                                            width={100}
                                         />
                                     </div>
                                 )
