@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String     @id @default(cuid()) // @id means primary key
+  clerkUserId String     @unique // 
+  email       String     @unique
+  name        String
+  imageUrl    String? // string? means persent or not
+  articles    Articles[]
+  comments    Comment[]
+  likes       Like[]
+}
+
+model Articles {
+  id            String @id @default(cuid())
+  title         String
+  content       String
+  category      String
+  featuredImage String
+
+  author   User   @relation(fields: [authorId], references: [id]) //  this means articles and user is related 
+  authorId String
+
+  comments Comment[]
+  likes    Like[]
+
+  createdAt DateTime @default(now())
+}
+
+model Comment {
+  id   String @id @default(cuid())
+  body String
+
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  articles  Articles @relation(fields: [articleId], references: [id])
+  articleId String
+
+  createdAt DateTime @default(now())
+}
+
+model Like {
+  id String @id @default(cuid())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  article   Articles @relation(fields: [articleId], references: [id])
+  articleId String
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, articleId]) // ensure the user can like an article only once
+}
