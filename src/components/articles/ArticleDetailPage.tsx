@@ -45,9 +45,11 @@ const ArticleDetailPage: React.FC<ArticleDetailPageProps> = async ({ article }) 
 
     const { userId } = await auth()
 
-    // if (!userId) {
-    //     return { errors: 'please login' }
-    // }
+    if (!userId) {
+        return (
+            <PleaseLoginFirstPage />
+        )
+    }
 
     const user = await prisma?.user?.findUnique({
         where: {
@@ -102,3 +104,11 @@ const ArticleDetailPage: React.FC<ArticleDetailPageProps> = async ({ article }) 
 }
 
 export default ArticleDetailPage
+
+const PleaseLoginFirstPage = () => {
+    return (
+      <div className="flex items-center justify-center h-screen text-xl font-bold">
+        Please Login First
+      </div>
+    );
+  };
